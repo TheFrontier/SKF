@@ -25,7 +25,8 @@ class FeatureManager(private val root: ConfigurationNode,
 
         executor.startCoroutine(
             SimpleFeatureCoroutineManager(coroutineManager, featureNode),
-            Continuation(dispatcher) {})
+            Continuation(dispatcher) {}
+        )
     }
 
     fun setupDefaults() {

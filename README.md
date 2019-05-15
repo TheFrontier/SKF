@@ -31,7 +31,9 @@ class MyPlugin constructor(@param:DefaultConfig(sharedRoot = false)
                            val loader: ConfigurationLoader<CommentedConfigurationNode>) {
 
     private val manager: FeatureManager =
-        FeatureManager(Sponge.getScheduler().createSyncExecutor(this).asCoroutineDispatcher()) { loader.load() }
+        FeatureManager(Sponge.getScheduler().createSyncExecutor(this).asCoroutineDispatcher()) {
+            loader.load()
+        }
 
     @Listener
     fun onPreInit(event: GamePreInitializationEvent) {

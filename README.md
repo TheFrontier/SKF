@@ -80,3 +80,19 @@ class MyPlugin constructor(@param:DefaultConfig(sharedRoot = false) val loader: 
     }
 }
 ```
+
+## Get It
+
+### Gradle (Kotlin DSL)
+
+```kotlin
+repositories {
+    maven {
+        setUrl("https://jitpack.io")
+    }
+}
+
+dependencies {
+    implementation("com.github.TheFrontier:SKF:<current version>")
+}
+```

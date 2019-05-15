@@ -8,7 +8,7 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.startCoroutine
 
-class FeatureManager(private val root: ConfigurationNode,
+class FeatureManager(private val root: () -> ConfigurationNode,
                      private val dispatcher: CoroutineDispatcher) {
 
     companion object {
@@ -21,16 +21,14 @@ class FeatureManager(private val root: ConfigurationNode,
     fun addFeature(id: String, enabledByDefault: Boolean = true, executor: FeatureExecutor) {
         features[id] = Feature(id, enabledByDefault, executor)
 
-        val featureNode = root.getNode(id)
-
         executor.startCoroutine(
-            SimpleFeatureCoroutineManager(coroutineManager, featureNode),
+            SimpleFeatureCoroutineManager(coroutineManager, id),
             Continuation(dispatcher) {}
         )
     }
 
     fun setupDefaults() {
-        val enabledNode = root.getNode(ENABLED_NODE)
+        val enabledNode = root().getNode(ENABLED_NODE)
 
         if (enabledNode.isVirtual) {
             val defaultEnabled = features.values.mapNotNullTo(arrayListOf()) { feature ->
@@ -41,20 +39,20 @@ class FeatureManager(private val root: ConfigurationNode,
             enabledNode.value = defaultEnabled
         }
 
-        for (continuation in coroutineManager.continuations[FeatureState.SETUP_DEFAULTS]) {
-            continuation.resume(Unit)
+        for ((id, continuation) in coroutineManager.continuations[FeatureState.SETUP_DEFAULTS]) {
+            continuation.resume(root().getNode(id))
         }
     }
 
     fun initialize() {
-        for (continuation in coroutineManager.continuations[FeatureState.INITIALIZATION]) {
-            continuation.resume(Unit)
+        for ((id, continuation) in coroutineManager.continuations[FeatureState.INITIALIZATION]) {
+            continuation.resume(root().getNode(id))
         }
     }
 
     fun shutdown() {
-        for (continuation in coroutineManager.continuations[FeatureState.SHUTDOWN]) {
-            continuation.resume(Unit)
+        for ((id, continuation) in coroutineManager.continuations[FeatureState.SHUTDOWN]) {
+            continuation.resume(root().getNode(id))
         }
     }
 }

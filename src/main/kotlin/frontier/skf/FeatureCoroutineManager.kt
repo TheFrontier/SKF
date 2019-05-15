@@ -6,7 +6,7 @@ import kotlin.coroutines.RestrictsSuspension
 @RestrictsSuspension
 interface FeatureCoroutineManager {
 
-    val node: ConfigurationNode
+    val id: String
 
-    suspend fun waitFor(state: FeatureState)
+    suspend fun waitFor(state: FeatureState): ConfigurationNode
 }

@@ -8,8 +8,8 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.startCoroutine
 
-class FeatureManager(private val root: () -> ConfigurationNode,
-                     private val dispatcher: CoroutineDispatcher) {
+class FeatureManager(private val dispatcher: CoroutineDispatcher,
+                     private val root: () -> ConfigurationNode) {
 
     companion object {
         private const val ENABLED_NODE = "-enabled-features"

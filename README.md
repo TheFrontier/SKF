@@ -27,7 +27,8 @@ import org.spongepowered.api.plugin.Plugin
 import org.spongepowered.api.text.Text
 
 @Plugin(id = "my-plugin")
-class MyPlugin constructor(@param:DefaultConfig(sharedRoot = false) val loader: ConfigurationLoader<CommentedConfigurationNode>) {
+class MyPlugin constructor(@param:DefaultConfig(sharedRoot = false)
+                           val loader: ConfigurationLoader<CommentedConfigurationNode>) {
 
     private val manager: FeatureManager =
         FeatureManager(Sponge.getScheduler().createSyncExecutor(this).asCoroutineDispatcher()) { loader.load() }
